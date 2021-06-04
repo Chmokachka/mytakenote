@@ -1,8 +1,13 @@
 pipeline{
-    agent{ docker { image 'takenote:mytag' } }
+    agent any
     stages{
         stage('test')
         {
+            agent{
+              docker {
+                image 'takenote:mytag'
+              }
+            }
             steps{
                 sh 'docker images'
             }
