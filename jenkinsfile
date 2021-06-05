@@ -4,7 +4,7 @@ node {
         env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
     stage('Building image') {
-          sh 'docker build -t takenote:mytag .'
+          sh 'docker build --build-arg CLIENT_ID=79ccc48a450cd4e391a8 -t takenote:mytag .'
           sh 'docker run -d -p 5000:5000 takenote:mytag'
         }
   }
