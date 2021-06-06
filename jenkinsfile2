@@ -1,7 +1,8 @@
 pipeline{
     agent any
     environment{
-      dockerImage=''
+      dockerImage = ''
+      registry = ''mmaaasshhaaaaa/takenote
     }
     stages{
         stage('Build')
