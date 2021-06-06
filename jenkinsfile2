@@ -1,15 +1,15 @@
 pipeline{
     agent any
+    environment{
+      dockerImage=''
+    }
     stages{
-        stage('test')
+        stage('Build')
         {
-            agent{
-              docker {
-                image 'takenote:mytag'
-              }
-            }
             steps{
-                sh 'docker images'
+              script{
+                dockerImage = docker.build registry
+              }
             }
         }
     }
