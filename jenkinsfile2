@@ -4,7 +4,6 @@ pipeline{
       additionalBuildArgs '--build-arg CLIENT_ID=79ccc48a450cd4e391a8'
       args '-t takenode:mytag'
       dir 'build'
-      label 'myDocker'
     }
 }
     stages{
