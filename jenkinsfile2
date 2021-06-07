@@ -1,15 +1,15 @@
-pipeline{
-  agent {
-    dockerfile {
-      additionalBuildArgs '--build-arg CLIENT_ID=79ccc48a450cd4e391a8'
-      args '-t takenode:mytag'
+pipeline {
+    agent {
+        docker {
+            image 'node:lts-buster-slim'
+            args '-p 3000:3000'
+        }
     }
-}
-    stages{
-        stage('Build')
-        {
-            steps{
-              sh 'hello'
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm i'
+                sh 'npm run dev'
             }
         }
     }
