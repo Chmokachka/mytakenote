@@ -20,8 +20,11 @@ RUN apk add --no-cache \
   libpng-dev \
   make \
   nasm
-RUN npm ci --only-production --silent
 
+# Run tests
+RUN npm run test
+
+RUN npm ci --only-production --silent
 
 # Build production client side React application
 RUN npm run build
