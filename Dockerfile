@@ -2,15 +2,15 @@
 FROM node:12-alpine
 
 # Set environment variables
-ENV PORT=5000
-ARG CLIENT_ID=79ccc48a450cd4e391a8
+#ENV PORT=5000
+#ARG CLIENT_ID=79ccc48a450cd4e391a8
 
-COPY . app/
+#COPY . app/
 
-WORKDIR app/
+#WORKDIR app/
 
 # Make sure dependencies exist for Webpack loaders
-RUN apk add --no-cache \
+#RUN apk add --no-cache \
   autoconf \
   automake \
   bash \
