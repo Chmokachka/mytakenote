@@ -22,11 +22,12 @@ RUN apk add --no-cache \
   nasm
 RUN npm ci --only-production --silent
 
-# Run tests
-RUN npm run test
 
 # Build production client side React application
 RUN npm run build
+
+# Run tests
+RUN npm run test
 
 # Expose port for Node
 EXPOSE $PORT
