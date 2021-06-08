@@ -1,0 +1,10 @@
+node {
+    stage('Initialize'){
+        def dockerHome = tool 'myDocker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
+    stage('Building image') {
+          sh 'docker pull node:12-alpine'
+          sh 'npm install'
+        }
+  }
