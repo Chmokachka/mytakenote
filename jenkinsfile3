@@ -1,11 +1,27 @@
-node {
-    stage('Initialize'){
-        def dockerHome = tool 'myDocker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
-    stage('Building image') {
-          sh 'docker build --build-arg CLIENT_ID=79ccc48a450cd4e391a8 -t takenote:mytag .'
-          sh 'docker run --rm -d -p 5000:5000 takenote:mytag'
-          telegramSend 'Hello World'
+pipeline {
+    agent {
+      docker {
+              image 'docker: latest'
+          }
         }
-  }
+    stages {
+        stage('Build image')
+        {
+          steps{
+            sh 'docker build --build-arg CLIENT_ID=79ccc48a450cd4e391a8 -t takenote:mytag .'
+          }
+        }
+        stage('Push to DockerHub')
+        {
+          steps{
+            withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME',\
+             passwordVariable: 'PASSWORD')]) {
+               sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+               sh "docker tag takenote:mytag mmaaasshhaaaaa/takenote:latest"
+               sh "docker push mmaaasshhaaaaa/takenote:latest"
+               echo "Image push complete"
+             }
+          }
+        }
+    }
+}
