@@ -26,8 +26,6 @@ RUN npm ci --only-production --silent
 # Build production client side React application
  RUN npm run build
 
-# Run tests
- RUN npm run test
 
 # Expose port for Node
  EXPOSE $PORT
