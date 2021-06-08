@@ -9,8 +9,12 @@ pipeline {
         stage('Installation') {
             steps {
                 sh 'npm i'
-                sh 'npm run dev'
             }
+        }
+        stage('Run test'){
+          steps{
+            sh 'npm run test'
+          }
         }
     }
 }
