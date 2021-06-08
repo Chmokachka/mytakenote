@@ -20,20 +20,21 @@ RUN apk add --no-cache \
   libpng-dev \
   make \
   nasm
-
 # Run tests
 RUN npm run test
 
-RUN npm ci --only-production --silent
+
+# RUN npm ci --only-production --silent
+
 
 # Build production client side React application
-RUN npm run build
+# RUN npm run build
 
 # Run tests
-RUN npm run test
+# RUN npm run test
 
 # Expose port for Node
-EXPOSE $PORT
+# EXPOSE $PORT
 
 # Start Node server
-ENTRYPOINT npm run prod
+# ENTRYPOINT npm run prod
