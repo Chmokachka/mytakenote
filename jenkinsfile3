@@ -4,18 +4,12 @@ pipeline {
         stage('hello')
         {
           steps{
-            telegramSend 'Hello World'
+            script{
+              def scannerHome = tool 'sonar_scanner';
+              withSonarQubeEnv('sonar_scanner') { 
+                  sh "${scannerHome}/bin/sonar-scanner"
+            }
           }
         }
-    }
-    post {
-      always {
-          echo 'I will always say Hello again!'
-
-          emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-              recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-              subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-
-      }
     }
   }
