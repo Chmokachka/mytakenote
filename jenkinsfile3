@@ -10,12 +10,11 @@ pipeline {
     }
     post {
       always {
-          echo 'I will always say Hello again!'
-
-          emailext body: "${DEFAULT_CONTENT}",
-          recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-          subject: "${DEFAULT_SUBJECT}"
-
+          emailext body: "*${currentBuild.currentResult}:* Job Name:
+              ${env.JOB_NAME} || Build Number: ${env.BUILD_NUMBER}\n More
+              information at: ${env.BUILD_URL}",
+              subject: 'Declarative Pipeline Build Status',
+              to: 'karkarech7@gmail.com'
       }
   }
 }
