@@ -1,37 +1,43 @@
 pipeline {
-    agent {
-      docker {
-              image 'node:lts-buster-slim'
-              args '-p 3000:3000'
-          }
-        }
+    agent any
     stages {
-        stage('Installation') {
-            steps {
-                sh 'npm i'
+      stage('Node')
+      {
+        agent {
+          docker {
+                  image 'node:lts-buster-slim'
+                  args '-p 3000:3000'
+              }
+            }
+            stages{
+              stage('Installation') {
+                  steps {
+                      sh 'npm i'
+                  }
+              }
+              stage('Run test'){
+                steps{
+                  sh 'npm run test'
+                }
+              }
             }
         }
-        stage('Run test'){
-          steps{
-            sh 'npm run test'
+          stage('Build image')
+          {
+            steps{
+              script{
+                def dockerHome = tool 'docker'
+                env.PATH = "${dockerHome}/bin:${env.PATH}"
+                sh 'docker build --build-arg CLIENT_ID=79ccc48a450cd4e391a8 -t takenote:mytag .'
+                withCredentials([usernamePassword(credentialsId: 'DockerHubAccount', usernameVariable: 'USERNAME',\
+                passwordVariable: 'PASSWORD')]) {
+                sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                sh "docker tag takenote:mytag mmaaasshhaaaaa/takenote:latest"
+                sh "docker push mmaaasshhaaaaa/takenote:latest"
+                echo "Image push complete"
+               }
+            }
           }
         }
-        stage('Build image')
-        {
-          steps{
-            script{
-              def dockerHome = tool 'docker'
-              env.PATH = "${dockerHome}/bin:${env.PATH}"
-              sh 'docker build --build-arg CLIENT_ID=79ccc48a450cd4e391a8 -t takenote:mytag .'
-              withCredentials([usernamePassword(credentialsId: 'DockerHubAccount', usernameVariable: 'USERNAME',\
-              passwordVariable: 'PASSWORD')]) {
-              sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-              sh "docker tag takenote:mytag mmaaasshhaaaaa/takenote:latest"
-              sh "docker push mmaaasshhaaaaa/takenote:latest"
-              echo "Image push complete"
-             }
-          }
-        }
-    }
-        }
+      }
     }
