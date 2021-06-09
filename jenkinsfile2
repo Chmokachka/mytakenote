@@ -16,23 +16,32 @@ pipeline {
             sh 'npm run test'
           }
         }
-        stage('Build image')
+        stage('Docker')
         {
-          steps{
-            sh 'docker build --build-arg CLIENT_ID=79ccc48a450cd4e391a8 -t takenote:mytag .'
-          }
-        }
-        stage('Push to DockerHub')
-        {
-          steps{
-            withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME',\
-             passwordVariable: 'PASSWORD')]) {
-               sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-               sh "docker tag takenote:mytag mmaaasshhaaaaa/takenote:latest"
-               sh "docker push mmaaasshhaaaaa/takenote:latest"
-               echo "Image push complete"
-             }
-          }
+          stages{
+              script{
+                def dockerHome = tool 'docker'
+                env.PATH = "${dockerHome}/bin:${env.PATH}"
+              }
+              stage('Build image')
+              {
+                steps{
+                  sh 'docker build --build-arg CLIENT_ID=79ccc48a450cd4e391a8 -t takenote:mytag .'
+                }
+              }
+              stage('Push to DockerHub')
+              {
+                steps{
+                  withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME',\
+                   passwordVariable: 'PASSWORD')]) {
+                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                     sh "docker tag takenote:mytag ${USERNAME}/takenote:latest"
+                     sh "docker push ${USERNAME}/takenote:latest"
+                     echo "Image push complete"
+                   }
+                }
+              }
+            }
         }
     }
 }
