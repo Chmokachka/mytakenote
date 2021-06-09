@@ -13,8 +13,8 @@ pipeline {
           echo 'I will always say Hello again!'
 
           emailext body: "${DEFAULT_CONTENT}",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-                subject: "${DEFAULT_SUBJECT}"
+          recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+          subject: "${DEFAULT_SUBJECT}"
 
       }
   }
